@@ -7,7 +7,7 @@ This is a minimal template for building React 19 apps with Vite, TypeScript, and
 Create a new project using `degit`:
 
 ```bash
-npx degit arthasyou/react-vite-template my-app
+npx degit atlas-form/react-vite-template my-app
 cd my-app
 pnpm install
 ```
