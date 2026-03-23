@@ -1,22 +1,33 @@
-import { Outlet, Link } from "react-router";
+import { Link, Outlet } from "react-router";
+import HeaderMe from "@/components/HeaderMe";
 
-export default function App() {
+export default function AppLayout() {
   return (
-    <>
-      <header>
-        <nav>
-          <Link to="/">Home</Link> | <Link to="/about">About</Link> |{" "}
-          <Link to="/logout">Logout</Link>
+    <div className="min-h-screen bg-slate-50 text-slate-900">
+      <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/90 backdrop-blur">
+        <nav className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4 sm:px-6">
+          <div className="flex items-center gap-5 text-sm font-medium">
+            <Link to="/" className="transition-colors hover:text-blue-600">
+              Home
+            </Link>
+            <Link to="/about" className="transition-colors hover:text-blue-600">
+              About
+            </Link>
+          </div>
+
+          <HeaderMe />
         </nav>
       </header>
 
-      <main>
-        <Outlet /> {/* 👈 子页面会渲染在这里 */}
+      <main className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6">
+        <Outlet />
       </main>
 
-      <footer>
-        <small>© 2025 My App</small>
+      <footer className="border-t border-slate-200 bg-white">
+        <div className="mx-auto w-full max-w-6xl px-4 py-4 text-xs text-slate-500 sm:px-6">
+          © 2026 My App
+        </div>
       </footer>
-    </>
+    </div>
   );
 }
