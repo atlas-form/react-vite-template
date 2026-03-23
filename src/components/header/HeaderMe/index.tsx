@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
 import type { Area, Point } from "react-easy-crop";
 import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
 import {
   getUploadAvatarSignApi,
   meApi,
@@ -9,12 +10,14 @@ import {
   uploadWithSignedUrlApi,
 } from "@/api";
 import ImageCropperModal from "@/components/base/ImageCropperModal";
-import type { UserInfo } from "@/models/userModel";
+import type { RootState } from "@/store";
+import { updateUser } from "@/store/authSlice";
 import { createCroppedImageFile } from "@/utils/imageCrop";
 
 export default function HeaderMe() {
   const { t } = useTranslation();
-  const [me, setMe] = useState<UserInfo | null>(null);
+  const dispatch = useDispatch();
+  const me = useSelector((state: RootState) => state.auth.user);
   const [menuOpen, setMenuOpen] = useState(false);
   const [savingAvatar, setSavingAvatar] = useState(false);
 
@@ -40,19 +43,6 @@ export default function HeaderMe() {
       document.removeEventListener("mousedown", onClickOutside);
     };
   }, []);
-
-  useEffect(() => {
-    void loadMe();
-  }, []);
-
-  const loadMe = async () => {
-    try {
-      const data = await meApi();
-      setMe(data);
-    } catch {
-      // Keep fallback display when request fails.
-    }
-  };
 
   const closeCropModal = () => {
     setCropOpen(false);
@@ -96,7 +86,8 @@ export default function HeaderMe() {
         contentType: avatarFile.type || "image/png",
       });
       await updateProfileApi({ avatar: sign.key });
-      await loadMe();
+      const nextUser = await meApi();
+      dispatch(updateUser(nextUser));
       closeCropModal();
       setMenuOpen(false);
     } finally {
@@ -104,9 +95,13 @@ export default function HeaderMe() {
     }
   };
 
-  const displayName = me?.name || t("header.me.fallbackName");
+  if (!me) {
+    return null;
+  }
+
+  const displayName = me.name || t("header.me.fallbackName");
   const avatarText = displayName.charAt(0).toUpperCase();
-  const avatarUrl = me?.avatar || "";
+  const avatarUrl = me.avatar || "";
 
   return (
     <>
