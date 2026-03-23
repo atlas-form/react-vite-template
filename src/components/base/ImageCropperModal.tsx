@@ -18,6 +18,10 @@ interface ImageCropperModalProps {
   onConfirm: () => void;
   title?: string;
   description?: string;
+  zoomLabel?: string;
+  cancelLabel?: string;
+  confirmLabel?: string;
+  confirmingLabel?: string;
 }
 
 export default function ImageCropperModal({
@@ -35,6 +39,10 @@ export default function ImageCropperModal({
   onConfirm,
   title = "Adjust Image",
   description = "Drag and zoom. The circle is the visible area.",
+  zoomLabel = "Zoom",
+  cancelLabel = "Cancel",
+  confirmLabel = "Save",
+  confirmingLabel = "Uploading...",
 }: ImageCropperModalProps) {
   if (!open || typeof document === "undefined") return null;
 
@@ -69,7 +77,7 @@ export default function ImageCropperModal({
         </div>
 
         <div className="mt-4">
-          <label className="mb-1 block text-xs text-slate-600">Zoom</label>
+          <label className="mb-1 block text-xs text-slate-600">{zoomLabel}</label>
           <input
             type="range"
             min={minZoom}
@@ -88,7 +96,7 @@ export default function ImageCropperModal({
             disabled={confirming}
             className="rounded-lg border border-slate-300 px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed"
           >
-            Cancel
+            {cancelLabel}
           </button>
           <button
             type="button"
@@ -96,7 +104,7 @@ export default function ImageCropperModal({
             disabled={confirming}
             className="rounded-lg bg-blue-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300"
           >
-            {confirming ? "Uploading..." : "Save"}
+            {confirming ? confirmingLabel : confirmLabel}
           </button>
         </div>
       </div>

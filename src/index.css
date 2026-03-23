@@ -1,1 +1,8 @@
 @import "tailwindcss";
+@import "./theme/light.css";
+@import "./theme/dark.css";
+
+body {
+  background: var(--app-bg);
+  color: var(--app-text);
+}

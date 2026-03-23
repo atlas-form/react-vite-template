@@ -3,13 +3,12 @@ import {
 	deleteWithSignedUrlApi,
 	getAccessSignApi,
 	getDeleteSignApi,
-	getUploadAvatarSignApi,
 	getUploadDocumentSignApi,
 	getUploadImageSignApi,
 	uploadWithSignedUrlApi,
 } from "@/api";
 
-type UploadKind = "avatar" | "image" | "document";
+type UploadKind = "image" | "document";
 
 interface UploadState {
 	key: string;
@@ -29,7 +28,7 @@ function getFileExt(file: File): string {
 }
 
 export default function S3UploadPanel() {
-	const [activeTab, setActiveTab] = useState<UploadKind>("avatar");
+	const [activeTab, setActiveTab] = useState<UploadKind>("image");
 	const [loading, setLoading] = useState(false);
 	const [message, setMessage] = useState("");
 	const [records, setRecords] = useState<Partial<Record<UploadKind, UploadState>>>({});
@@ -37,7 +36,6 @@ export default function S3UploadPanel() {
 	const current = records[activeTab];
 
 	const title = useMemo(() => {
-		if (activeTab === "avatar") return "Avatar";
 		if (activeTab === "image") return "Image";
 		return "Document";
 	}, [activeTab]);
@@ -48,15 +46,6 @@ export default function S3UploadPanel() {
 		try {
 			let key = "";
 			let uploadUrl = "";
-
-			if (activeTab === "avatar") {
-				const sign = await getUploadAvatarSignApi();
-				await uploadWithSignedUrlApi(file, sign, {
-					contentType: file.type || "application/octet-stream",
-				});
-				key = sign.key;
-				uploadUrl = sign.upload_url;
-			}
 
 			if (activeTab === "image") {
 				const ext = getFileExt(file);
@@ -145,7 +134,7 @@ export default function S3UploadPanel() {
 	return (
 		<div className="mt-8 rounded-xl border border-gray-200 p-4">
 			<div className="mb-4 flex gap-2">
-				{(["avatar", "image", "document"] as UploadKind[]).map((tab) => (
+				{(["image", "document"] as UploadKind[]).map((tab) => (
 					<button
 						key={tab}
 						type="button"
@@ -171,9 +160,7 @@ export default function S3UploadPanel() {
 						type="file"
 						disabled={loading}
 						accept={
-							activeTab === "image" || activeTab === "avatar"
-								? "image/*"
-								: ".pdf,.doc,.docx,.xls,.xlsx,.txt,.md"
+							activeTab === "image" ? "image/*" : ".pdf,.doc,.docx,.xls,.xlsx,.txt,.md"
 						}
 						onChange={(e) => {
 							const file = e.target.files?.[0];
@@ -188,7 +175,7 @@ export default function S3UploadPanel() {
 				<div className="flex flex-wrap gap-2">
 					<button
 						type="button"
-						disabled={loading || !current?.uploadUrl || activeTab === "avatar"}
+						disabled={loading || !current?.uploadUrl}
 						onClick={() => void handleAccessSign()}
 						className="rounded bg-indigo-600 px-3 py-1 text-sm text-white disabled:cursor-not-allowed disabled:bg-gray-300"
 					>

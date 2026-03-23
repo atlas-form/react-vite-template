@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
 import type { Area, Point } from "react-easy-crop";
+import { useTranslation } from "react-i18next";
 import {
   getUploadAvatarSignApi,
   meApi,
@@ -12,6 +13,7 @@ import type { UserInfo } from "@/models/userModel";
 import { createCroppedImageFile } from "@/utils/imageCrop";
 
 export default function HeaderMe() {
+  const { t } = useTranslation();
   const [me, setMe] = useState<UserInfo | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [savingAvatar, setSavingAvatar] = useState(false);
@@ -102,7 +104,7 @@ export default function HeaderMe() {
     }
   };
 
-  const displayName = me?.name || "User";
+  const displayName = me?.name || t("header.me.fallbackName");
   const avatarText = displayName.charAt(0).toUpperCase();
   const avatarUrl = me?.avatar || "";
 
@@ -111,8 +113,10 @@ export default function HeaderMe() {
       <div className="relative" ref={menuRef}>
         <button
           type="button"
-          onClick={() => setMenuOpen((prev) => !prev)}
-          className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-2 py-1 pr-3 shadow-sm transition hover:bg-slate-50"
+          onClick={() => {
+            setMenuOpen((prev) => !prev);
+          }}
+          className="flex items-center gap-2 rounded-full border border-[var(--app-border)] bg-[var(--app-surface)] px-2 py-1 pr-3 shadow-sm transition hover:opacity-90"
         >
           {avatarUrl ? (
             <img
@@ -127,7 +131,7 @@ export default function HeaderMe() {
           )}
           <span className="max-w-28 truncate text-sm">{displayName}</span>
           <svg
-            className={`h-4 w-4 text-slate-500 transition-transform ${menuOpen ? "rotate-180" : ""}`}
+            className={`h-4 w-4 text-[var(--app-muted-text)] transition-transform ${menuOpen ? "rotate-180" : ""}`}
             viewBox="0 0 20 20"
             fill="currentColor"
             aria-hidden="true"
@@ -141,7 +145,7 @@ export default function HeaderMe() {
         </button>
 
         {menuOpen && (
-          <div className="absolute right-0 mt-2 w-44 rounded-xl border border-slate-200 bg-white p-1 shadow-lg">
+          <div className="absolute right-0 mt-2 w-48 rounded-xl border border-[var(--app-border)] bg-[var(--app-surface)] p-1 shadow-lg">
             <input
               ref={fileInputRef}
               type="file"
@@ -161,21 +165,21 @@ export default function HeaderMe() {
               disabled={savingAvatar}
               className="block w-full rounded-lg px-3 py-2 text-left text-sm hover:bg-slate-100"
             >
-              Upload Avatar
+              {t("header.me.uploadAvatar")}
             </button>
             <Link
               to="/about"
               onClick={() => setMenuOpen(false)}
               className="block rounded-lg px-3 py-2 text-sm hover:bg-slate-100"
             >
-              Profile
+              {t("header.me.profile")}
             </Link>
             <Link
               to="/logout"
               onClick={() => setMenuOpen(false)}
               className="block rounded-lg px-3 py-2 text-sm text-red-600 hover:bg-red-50"
             >
-              Logout
+              {t("header.me.logout")}
             </Link>
           </div>
         )}
@@ -192,8 +196,12 @@ export default function HeaderMe() {
         onCropComplete={setCroppedAreaPixels}
         onCancel={closeCropModal}
         onConfirm={() => void onConfirmUploadAvatar()}
-        title="Adjust Avatar"
-        description="Drag and zoom. The circle is the visible avatar area."
+        title={t("header.me.crop.title")}
+        description={t("header.me.crop.description")}
+        zoomLabel={t("header.me.crop.zoom")}
+        cancelLabel={t("header.me.crop.cancel")}
+        confirmLabel={t("header.me.crop.confirm")}
+        confirmingLabel={t("header.me.crop.confirming")}
       />
     </>
   );

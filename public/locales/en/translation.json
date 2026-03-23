@@ -1,4 +1,26 @@
 {
   "welcome": "Welcome to React",
-  "description": "This is an example of i18n."
+  "description": "This is an example of i18n.",
+  "header": {
+    "theme": {
+      "system": "System",
+      "light": "Light",
+      "dark": "Dark"
+    },
+    "me": {
+      "fallbackName": "User",
+      "uploadAvatar": "Upload Avatar",
+      "settings": "Settings",
+      "profile": "Profile",
+      "logout": "Logout",
+      "crop": {
+        "title": "Adjust Avatar",
+        "description": "Drag and zoom. The circle is the visible avatar area.",
+        "zoom": "Zoom",
+        "cancel": "Cancel",
+        "confirm": "Save",
+        "confirming": "Uploading..."
+      }
+    }
+  }
 }

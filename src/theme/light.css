@@ -1,0 +1,11 @@
+:root,
+[data-theme="light"] {
+  --app-bg: #f8fafc;
+  --app-text: #0f172a;
+  --app-surface: #ffffff;
+  --app-border: #e2e8f0;
+  --app-muted-text: #64748b;
+  --app-hover: #f1f5f9;
+  --app-active-bg: #dbeafe;
+  --app-active-text: #1d4ed8;
+}

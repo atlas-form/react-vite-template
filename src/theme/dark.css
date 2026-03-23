@@ -1,0 +1,10 @@
+[data-theme="dark"] {
+  --app-bg: #0f172a;
+  --app-text: #e2e8f0;
+  --app-surface: #1e293b;
+  --app-border: #334155;
+  --app-muted-text: #94a3b8;
+  --app-hover: #334155;
+  --app-active-bg: #1e3a8a;
+  --app-active-text: #dbeafe;
+}

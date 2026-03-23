@@ -1,4 +1,26 @@
 {
   "welcome": "欢迎使用 React",
-  "description": "这是一个 i18n 的示例。"
+  "description": "这是一个 i18n 的示例。",
+  "header": {
+    "theme": {
+      "system": "跟随系统",
+      "light": "浅色",
+      "dark": "深色"
+    },
+    "me": {
+      "fallbackName": "用户",
+      "uploadAvatar": "上传头像",
+      "settings": "设置",
+      "profile": "个人资料",
+      "logout": "退出登录",
+      "crop": {
+        "title": "调整头像",
+        "description": "拖动并缩放图片，圆形区域就是最终头像显示区域。",
+        "zoom": "缩放",
+        "cancel": "取消",
+        "confirm": "保存",
+        "confirming": "上传中..."
+      }
+    }
+  }
 }
