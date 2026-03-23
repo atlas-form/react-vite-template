@@ -1,52 +1,33 @@
 # How To Use AI
 
-## Purpose
-This project is an AI-standardized development framework.
-You can describe your requirement, and AI will implement code according to the framework's conventions.
-
-## What To Tell AI
-- Business goal: what you want to build or change.
-- Scope: which page/module/API should be affected.
-- Constraints: style, performance, compatibility, security, deadline.
-- Acceptance criteria: what counts as done.
-
-## Prompt Template
-Use this template when asking AI:
+## Minimal Usage
+You only need one sentence:
 
 ```text
-Goal:
-Build/modify <feature>.
-
-Context:
-Project uses React + Vite + TypeScript.
-Follow existing structure and coding style.
-
-Requirements:
-1. ...
-2. ...
-3. ...
-
-Constraints:
-- Do not break existing routes.
-- Keep i18n and theme compatible.
-- Add/adjust tests if needed.
-
-Done Criteria:
-- [ ] Feature works in dev mode.
-- [ ] Build passes.
-- [ ] Key files updated with clear diffs.
+Read the ai_protocal directory first, then implement: <your requirement>
 ```
 
-## Framework Rules
-- Reuse existing modules before creating new ones.
-- Keep UI text in i18n language files.
-- Keep styles compatible with current theme variables.
-- Prefer small, focused changes with clear file boundaries.
-- Always verify with a build before finishing.
+## Required AI Workflow (Before Coding)
+Before making any code change, AI must:
 
-## Recommended Workflow
-1. Describe requirement in one sentence.
-2. Add must-have and must-not-have constraints.
-3. Ask AI to list affected files first.
-4. Ask AI to implement and verify.
-5. Review diff and run final checks.
+1. Read all files in `ai_protocal/`.
+2. Output a Todo list (Markdown checklist) first.
+3. Check off and strike through each completed item as progress updates.
+
+Related protocol files:
+- `ai_protocal/AI_CODING_PROTOCOL.md`
+- `ai_protocal/DIRECTORY_GUIDE.md`
+- `ai_protocal/TODO_PROGRESS_PROTOCOL.md`
+
+## Why This Workflow
+- Less input from users (no long prompt required).
+- Better recovery after interruptions (continue from Todo state).
+- Consistent output aligned with project conventions.
+
+## Recommended Request Format
+
+```text
+Read the ai_protocal directory first.
+Create a Todo list first and strike through completed items.
+Then implement: <feature requirement>
+```

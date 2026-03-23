@@ -13,15 +13,6 @@ export default function App() {
   const dispatch = useDispatch();
   const [isRestored, setIsRestored] = useState(false);
 
-  // useEffect(() => {
-  //   const token = localStorage.getItem("token");
-  //   if (token) {
-  //     // 你可以加一个实际的 /me 请求，这里暂时 mock 用户
-  //     dispatch(loginSuccess({ token, user: { id: "local", name: "Guest" } }));
-  //   }
-  //   setIsRestored(true);
-  // }, [dispatch]);
-
   useEffect(() => {
     const token = localStorage.getItem("token");
 
