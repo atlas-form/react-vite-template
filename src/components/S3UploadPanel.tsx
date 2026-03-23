@@ -91,7 +91,7 @@ export default function S3UploadPanel() {
 		setLoading(true);
 		setMessage("");
 		try {
-			const res = await getAccessSignApi({ key: current.uploadUrl });
+			const res = await getAccessSignApi({ key: current.key });
 			setRecords((prev) => ({
 				...prev,
 				[activeTab]: {
@@ -113,7 +113,7 @@ export default function S3UploadPanel() {
 		setLoading(true);
 		setMessage("");
 		try {
-			const sign = await getDeleteSignApi({ key: current.uploadUrl });
+			const sign = await getDeleteSignApi({ key: current.key });
 			await deleteWithSignedUrlApi(sign);
 			setRecords((prev) => ({
 				...prev,

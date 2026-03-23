@@ -13,16 +13,16 @@ export default function Home() {
         <button
           type="button"
           onClick={() => i18n.changeLanguage("zhCN")}
-          className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300"
+          className="rounded border border-[var(--app-border)] bg-[var(--app-surface)] px-3 py-1 hover:bg-[var(--app-hover)]"
         >
-          中文
+          {t("header.language.zhCN")}
         </button>
         <button
           type="button"
           onClick={() => i18n.changeLanguage("en")}
-          className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300"
+          className="rounded border border-[var(--app-border)] bg-[var(--app-surface)] px-3 py-1 hover:bg-[var(--app-hover)]"
         >
-          English
+          {t("header.language.en")}
         </button>
       </div>
 

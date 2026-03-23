@@ -1,4 +1,8 @@
-import type { LoginRequest, LoginResponse } from "@/models/authModel";
+import type {
+  LoginRequest,
+  LoginResponse,
+  RegisterRequest,
+} from "@/models/authModel";
 import { request } from "./base";
 
 export const loginApi = async (
@@ -11,4 +15,13 @@ export const loginApi = async (
     group: "auth",
   });
   return response;
+};
+
+export const registerApi = async (payload: RegisterRequest): Promise<void> => {
+  await request<RegisterRequest, unknown>({
+    method: "POST",
+    url: "/auth/register",
+    body: payload,
+    group: "auth",
+  });
 };

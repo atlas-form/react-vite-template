@@ -1,10 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-
-interface UserInfo {
-  id: string;
-  name: string;
-  // Add other fields as needed
-}
+import type { UserInfo } from "@/models/userModel";
 
 interface AuthState {
   isLogin: boolean;

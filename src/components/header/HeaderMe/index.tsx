@@ -95,7 +95,7 @@ export default function HeaderMe() {
       await uploadWithSignedUrlApi(avatarFile, sign, {
         contentType: avatarFile.type || "image/png",
       });
-      await updateProfileApi({ avatar: sign.upload_url });
+      await updateProfileApi({ avatar: sign.key });
       await loadMe();
       closeCropModal();
       setMenuOpen(false);

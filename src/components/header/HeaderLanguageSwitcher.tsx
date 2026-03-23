@@ -53,7 +53,7 @@ export default function HeaderLanguageSwitcher() {
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-36 rounded-xl border border-[var(--app-border)] bg-[var(--app-surface)] p-1 shadow-lg">
+        <div className="absolute right-0 z-50 mt-2 w-36 rounded-xl border border-[var(--app-border)] bg-[var(--app-surface)] p-1 shadow-lg">
           {LANGUAGE_OPTIONS.map((item) => {
             const active =
               currentLang === item.value || currentLang.startsWith(item.value);

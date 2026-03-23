@@ -208,12 +208,12 @@ async function tryRefreshToken(): Promise<boolean> {
 	const res = await fetch(finalUrl, {
 		method: "POST",
 		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify({ refresh }),
+		body: JSON.stringify({ refreshToken: refresh }),
 	});
 
 	if (res.ok) {
 		const newTokenData = await res.json();
-		const token = newTokenData.data?.access_token;
+		const token = newTokenData.data?.accessToken ?? newTokenData.data?.access_token;
 		if (token) {
 			localStorage.setItem("token", token);
 			return true;
