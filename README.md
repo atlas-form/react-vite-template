@@ -74,7 +74,7 @@ my-app/
 ├── vite.config.ts               # Vite configuration
 ├── tsconfig.json                # TypeScript configuration
 ├── .env.example                 # Example environment variables
-└── .eslintrc.cjs                # ESLint configuration
+└── eslint.config.js             # ESLint configuration
 ```
 
 ## 🛠 Environment Modes
@@ -89,4 +89,4 @@ Environment variables are loaded automatically by Vite depending on the mode.
 The authentication backend for this template is powered by [auth-rs](https://github.com/arthasyou/auth-rs).  
 Please make sure to run `auth-rs` locally to enable login and user-related functionality.
 
-Default proxy setup assumes it's running at: `http://localhost:9876`
+Default proxy setup assumes it's running at: `http://localhost:8000`

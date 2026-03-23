@@ -2,7 +2,7 @@ import type { LoginRequest, LoginResponse } from "@/models/authModel";
 import { request } from "./base";
 
 export const loginApi = async (
-  payload: LoginRequest
+  payload: LoginRequest,
 ): Promise<LoginResponse> => {
   const response = await request<LoginRequest, LoginResponse>({
     method: "POST",

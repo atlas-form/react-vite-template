@@ -18,7 +18,7 @@ export function resolveUrl(url: string, group: UrlGroup = "api"): string {
 	if (isAbsolute) return url;
 
 	const base = BASE_URLS[group];
-	if (!base) {
+	if (base === undefined) {
 		throw new Error(`[resolveUrl] Unknown URL group: '${group}'`);
 	}
 

@@ -9,6 +9,7 @@ i18n
   .use(initReactI18next)
   .init({
     fallbackLng: "en",
+    supportedLngs: ["en", "zhCN"],
     debug: false,
     ns: ["translation", "error"], // ✅ 命名空间列表
     defaultNS: "translation", // ✅ 默认命名空间
@@ -18,6 +19,15 @@ i18n
 
     backend: {
       loadPath: "/locales/{{lng}}/{{ns}}.json",
+    },
+    detection: {
+      convertDetectedLanguage: (lng) => {
+        const normalized = lng.toLowerCase();
+        if (normalized === "zh-cn" || normalized === "zh") {
+          return "zhCN";
+        }
+        return lng;
+      },
     },
   });
 

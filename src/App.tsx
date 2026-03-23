@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RouterProvider, createBrowserRouter, Navigate } from "react-router";
+import { ToastContainer } from "react-toastify";
 import { loginSuccess } from "@/store/authSlice";
 import type { RootState } from "@/store";
 import { publicRoutes } from "@/routes/publicRoutes";
@@ -59,5 +60,10 @@ export default function App() {
 
   if (!router) return null; // or <Loading />
 
-  return <RouterProvider router={router} />;
+  return (
+    <>
+      <RouterProvider router={router} />
+      <ToastContainer />
+    </>
+  );
 }

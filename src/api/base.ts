@@ -4,7 +4,7 @@ import i18n from "@/i18n";
 import type { UrlGroup } from "@/utils/url";
 
 interface RequestParams<T = Record<string, unknown>> {
-	method: "GET" | "POST" | "PUT" | "DELETE";
+	method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 	url: string;
 	body?: T;
 	group?: UrlGroup;
@@ -65,7 +65,7 @@ export async function request<T = unknown, R = unknown>({
 			?.data as ErrorResponse;
 		const message = getTranslatedError(error);
 		showGlobalError(message);
-		throw new Error(message);
+		throw Object.assign(new Error(message), { cause: err });
 	}
 }
 
