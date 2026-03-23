@@ -1,20 +1,11 @@
 import { request } from "./base";
 import type {
+  MeResponse,
   UpdateEmailPayload,
   UpdatePasswordPayload,
   UpdateProfilePayload,
   UserInfo,
 } from "@/models/userModel";
-
-interface MeResponse {
-  display_user_id?: string | null;
-  username: string;
-  display_name?: string | null;
-  avatar?: string | null;
-  email?: string | null;
-  email_verified: boolean;
-  disabled: boolean;
-}
 
 export const meApi = async (): Promise<UserInfo> => {
   const response = await request<undefined, MeResponse>({

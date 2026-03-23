@@ -1,66 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
-import { createPortal } from "react-dom";
-import Cropper from "react-easy-crop";
 import type { Area, Point } from "react-easy-crop";
-import "react-easy-crop/react-easy-crop.css";
 import {
   getUploadAvatarSignApi,
   meApi,
   updateProfileApi,
   uploadWithSignedUrlApi,
 } from "@/api";
+import ImageCropperModal from "@/components/base/ImageCropperModal";
 import type { UserInfo } from "@/models/userModel";
-
-const OUTPUT_SIZE = 512;
-
-function createImage(src: string): Promise<HTMLImageElement> {
-  return new Promise((resolve, reject) => {
-    const image = new Image();
-    image.onload = () => resolve(image);
-    image.onerror = reject;
-    image.src = src;
-  });
-}
-
-async function createCroppedAvatarFile(
-  imageSrc: string,
-  cropPixels: Area,
-): Promise<File> {
-  const image = await createImage(imageSrc);
-  const canvas = document.createElement("canvas");
-  canvas.width = OUTPUT_SIZE;
-  canvas.height = OUTPUT_SIZE;
-
-  const ctx = canvas.getContext("2d");
-  if (!ctx) {
-    throw new Error("Canvas context unavailable");
-  }
-
-  ctx.drawImage(
-    image,
-    cropPixels.x,
-    cropPixels.y,
-    cropPixels.width,
-    cropPixels.height,
-    0,
-    0,
-    OUTPUT_SIZE,
-    OUTPUT_SIZE,
-  );
-
-  const blob = await new Promise<Blob>((resolve, reject) => {
-    canvas.toBlob((nextBlob) => {
-      if (!nextBlob) {
-        reject(new Error("Failed to export cropped image"));
-        return;
-      }
-      resolve(nextBlob);
-    }, "image/png");
-  });
-
-  return new File([blob], `avatar-${Date.now()}.png`, { type: "image/png" });
-}
+import { createCroppedImageFile } from "@/utils/imageCrop";
 
 export default function HeaderMe() {
   const [me, setMe] = useState<UserInfo | null>(null);
@@ -70,7 +19,7 @@ export default function HeaderMe() {
   const [cropOpen, setCropOpen] = useState(false);
   const [cropImageUrl, setCropImageUrl] = useState("");
   const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1);
+  const [zoom, setZoom] = useState(1.2);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -90,6 +39,10 @@ export default function HeaderMe() {
     };
   }, []);
 
+  useEffect(() => {
+    void loadMe();
+  }, []);
+
   const loadMe = async () => {
     try {
       const data = await meApi();
@@ -99,14 +52,10 @@ export default function HeaderMe() {
     }
   };
 
-  useEffect(() => {
-    void loadMe();
-  }, []);
-
   const closeCropModal = () => {
     setCropOpen(false);
     setCrop({ x: 0, y: 0 });
-    setZoom(1);
+    setZoom(1.2);
     setCroppedAreaPixels(null);
 
     if (cropImageUrl) {
@@ -135,7 +84,11 @@ export default function HeaderMe() {
 
     setSavingAvatar(true);
     try {
-      const avatarFile = await createCroppedAvatarFile(cropImageUrl, croppedAreaPixels);
+      const avatarFile = await createCroppedImageFile(cropImageUrl, croppedAreaPixels, {
+        outputSize: 512,
+        mimeType: "image/png",
+        fileName: `avatar-${Date.now()}.png`,
+      });
       const sign = await getUploadAvatarSignApi();
       await uploadWithSignedUrlApi(avatarFile, sign, {
         contentType: avatarFile.type || "image/png",
@@ -152,76 +105,6 @@ export default function HeaderMe() {
   const displayName = me?.name || "User";
   const avatarText = displayName.charAt(0).toUpperCase();
   const avatarUrl = me?.avatar || "";
-  const cropperModal =
-    cropOpen && typeof document !== "undefined"
-      ? createPortal(
-          <div className="fixed inset-0 z-[120] flex items-center justify-center overflow-y-auto bg-slate-900/60 p-4">
-            <div className="my-8 w-full max-w-md rounded-2xl bg-white p-4 shadow-xl">
-              <h3 className="text-base font-semibold text-slate-900">Adjust Avatar</h3>
-              <p className="mt-1 text-xs text-slate-500">
-                Drag and zoom. The circle is the visible avatar area.
-              </p>
-
-              <div className="relative mt-4 h-64 w-full overflow-hidden rounded-xl bg-slate-900 sm:h-72">
-                <Cropper
-                  image={cropImageUrl}
-                  crop={crop}
-                  zoom={zoom}
-                  aspect={1}
-                  objectFit="cover"
-                  minZoom={1}
-                  maxZoom={4}
-                  cropShape="round"
-                  showGrid={false}
-                  classes={{ containerClassName: "cursor-grab active:cursor-grabbing" }}
-                  style={{
-                    cropAreaStyle: {
-                      border: "2px solid rgba(255,255,255,0.95)",
-                      color: "rgba(0, 0, 0, 0.72)",
-                    },
-                  }}
-                  onCropChange={setCrop}
-                  onZoomChange={setZoom}
-                  onCropComplete={(_, areaPixels) => setCroppedAreaPixels(areaPixels)}
-                />
-              </div>
-
-              <div className="mt-4">
-                <label className="mb-1 block text-xs text-slate-600">Zoom</label>
-                <input
-                  type="range"
-                  min={1}
-                  max={4}
-                  step={0.01}
-                  value={zoom}
-                  onChange={(e) => setZoom(Number(e.target.value))}
-                  className="w-full"
-                />
-              </div>
-
-              <div className="mt-4 flex justify-end gap-2">
-                <button
-                  type="button"
-                  onClick={closeCropModal}
-                  disabled={savingAvatar}
-                  className="rounded-lg border border-slate-300 px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  onClick={() => void onConfirmUploadAvatar()}
-                  disabled={savingAvatar || !croppedAreaPixels}
-                  className="rounded-lg bg-blue-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300"
-                >
-                  {savingAvatar ? "Uploading..." : "Save Avatar"}
-                </button>
-              </div>
-            </div>
-          </div>,
-          document.body,
-        )
-      : null;
 
   return (
     <>
@@ -297,7 +180,21 @@ export default function HeaderMe() {
           </div>
         )}
       </div>
-      {cropperModal}
+
+      <ImageCropperModal
+        open={cropOpen}
+        imageUrl={cropImageUrl}
+        crop={crop}
+        zoom={zoom}
+        confirming={savingAvatar}
+        onCropChange={setCrop}
+        onZoomChange={setZoom}
+        onCropComplete={setCroppedAreaPixels}
+        onCancel={closeCropModal}
+        onConfirm={() => void onConfirmUploadAvatar()}
+        title="Adjust Avatar"
+        description="Drag and zoom. The circle is the visible avatar area."
+      />
     </>
   );
 }
