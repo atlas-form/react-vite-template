@@ -34,6 +34,7 @@ VITE_FILE_URL=/file
 请查看 [How To Use AI（中文）](./how_to_use_ai.zh-CN.md)。
 
 该指南包含：
+
 - 在让 AI 实现之前，你需要提供哪些信息
 - 开发任务可直接复用的提示词模板
 - 保持代码一致性的框架规则
@@ -73,5 +74,17 @@ my-app/
 
 ## 认证后端
 
-认证后端使用 [auth-rs](https://github.com/arthasyou/auth-rs)。
+认证后端使用 [auth](https://github.com/atlas-form/auth)。
 如果要体验登录与用户功能，请先在本地运行该服务。
+
+## S3 签名服务
+
+S3 上传签名服务使用 [file-service](https://github.com/code-serenade/file-service)。
+
+前端上传流程：
+- 先请求签名接口获取上传参数
+- 再通过签名 URL 直传到对象存储
+
+相关前端代码：
+- `src/api/fileApi.ts`
+- `src/components/S3UploadPanel.tsx`

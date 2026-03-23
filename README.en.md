@@ -34,6 +34,7 @@ VITE_FILE_URL=/file
 See [How To Use AI (EN)](./how_to_use_ai.en.md).
 
 This guide includes:
+
 - What to tell AI before implementation
 - A prompt template for development tasks
 - Framework rules to keep code consistent
@@ -73,5 +74,17 @@ my-app/
 
 ## Authentication Backend
 
-The authentication backend is [auth-rs](https://github.com/arthasyou/auth-rs).
+The authentication backend is [auth](https://github.com/arthasyou/auth).
 Run it locally if you want to use login and user features.
+
+## S3 Signature Service
+
+S3 upload signing is powered by [file-service](https://github.com/code-serenade/file-service).
+
+Frontend upload flow:
+- Request a signing endpoint first to get upload parameters
+- Upload directly to object storage through the signed URL
+
+Related frontend files:
+- `src/api/fileApi.ts`
+- `src/components/S3UploadPanel.tsx`
