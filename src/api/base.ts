@@ -17,8 +17,8 @@ interface SuccessResponse<T> {
 }
 
 interface ErrorResponse {
-	code: number;
-	message: string;
+	error_code?: number;
+	code?: number;
 }
 
 /**
@@ -93,11 +93,23 @@ export function streamRequest<
 	});
 }
 
-function getTranslatedError(error: ErrorResponse): string {
-	const key = error.code.toString();
+function getTranslatedError(error?: ErrorResponse): string {
+	const code = extractErrorCode(error);
+	if (code == null) {
+		return i18n.t("default", { ns: "error" });
+	}
+
+	const key = String(code);
 	return i18n.exists(key, { ns: "error" })
 		? i18n.t(key, { ns: "error" })
-		: error.message || i18n.t("default", { ns: "error" });
+		: i18n.t("default", { ns: "error" });
+}
+
+function extractErrorCode(error?: ErrorResponse): number | null {
+	if (!error) return null;
+	if (typeof error.error_code === "number") return error.error_code;
+	if (typeof error.code === "number") return error.code;
+	return null;
 }
 
 /**

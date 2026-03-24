@@ -1,19 +1,11 @@
 {
-  "default": "request failed, please try again later",
-  "-1": "server error",
-  "-2": "invalid request",
-  "-3": "invalid param",
-  "-4": "invalid token",
-  "-5": "invalid sign",
-  "-6": "invalid method",
-  "-7": "invalid url",
-  "-8": "invalid content type",
-  "-9": "user not logged in",
-  "-10": "user already exists",
-  "-11": "user does not exist",
-  "-12": "password error",
-  "-13": "invalid symbol",
-  "-14": "user not found",
-  "-15": "insufficient balance",
-  "-16": "invite code not found"
+  "default": "unauthorized or unknown error, please try again later",
+  "-1": "server internal error",
+  "-10000": "username already exists",
+  "-10001": "email already exists",
+  "-10002": "user not found",
+  "-10003": "user disabled",
+  "-10004": "password hash failed",
+  "-10005": "password hash parse failed",
+  "-10006": "invalid password"
 }
